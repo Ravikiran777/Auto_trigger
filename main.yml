@@ -6,13 +6,21 @@
   - debug: msg="{{password}}"
 
   - name: Docker login
-    docker_login:
-     username: "{{username}}"
-     password: "{{password}}"
-     email: "{{email}}"
+    expect:
+     command: "sudo docker login"
+     responses:
+      Username: "{{username}}"
+      Password: "{{password}}"
+      jenkins: 1234
+      
+#  - name: Docker login
+#    docker_login:
+#     username: "{{username}}"
+#     password: "{{password}}"
+#     email: "{{email}}"
       
   - name: Push docker image
-    command: "docker push {{username}}/{{image}}"
+    command: "sudo docker push {{username}}/{{image}}"
 #    
 #  - name: Push docker image
 #    docker_image:
