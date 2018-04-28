@@ -1,0 +1,36 @@
+---
+- hosts: localhost
+  tasks:
+
+  - debug: msg="{{username}}"
+  - debug: msg="{{password}}"
+
+  - name: Docker login
+    docker_login:
+     username: "{{username}}"
+     password: "{{password}}"
+     email: "{{email}}"
+      
+  - name: Push docker image
+    command: "docker push {{username}}/{{image}}"
+#    
+#  - name: Push docker image
+#    docker_image:
+#      name: "{{image}}"
+#      repository: "{{username}}/{{image}}"
+#      push: yes
+#
+- hosts: "{{node}}"
+  tasks:
+  
+  - name: Docker login
+    expect:
+     command: "docker login"
+     responses:
+      Username: "{{username}}"
+      Password: "{{password}}"
+  
+   
+  - name: pull image from docker hub
+    command: "docker pull {{username}}/{{image}}"
+
